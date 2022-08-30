@@ -1,0 +1,12 @@
+# IDE config file
+.vscode
+.idea
+
+# build file
+cmake-*
+build
+
+# third party library
+thirdparty
+
+# other
