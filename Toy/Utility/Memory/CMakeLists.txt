@@ -3,6 +3,6 @@
 
 message("Compile Utility Memory")
 
-set(SRCS_LIST PoolAlloc.cpp)
-
-add_library(utility_memory STATIC ${SRCS_LIST})
+#set(SRCS_LIST )
+#
+#add_library(utility_memory STATIC ${SRCS_LIST})

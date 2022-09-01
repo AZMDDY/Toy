@@ -8,6 +8,9 @@ public:
     DemoFixtrue() = default;
     ~DemoFixtrue() override = default;
 
+    static void SetUpTestSuite() {}
+    static void TearDownTestSuite() {}
+
     void DoSomething() {}
 
 protected:
