@@ -12,4 +12,10 @@
         (void)(x); \
     } while (0)
 
+template<class T>
+struct Range {
+    T min;
+    T max;
+    bool Contain(const T& val) { return val >= min && val <= max; }
+};
 #endif  // TOY_BASIC_H
