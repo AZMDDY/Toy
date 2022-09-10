@@ -41,12 +41,22 @@ public:
     void Handle(uint32_t timeInterval)
     {
         curState->HandleAction(shared_from_this());
+        // HandleAction中可能刷新状态
         if (stateRefresh) {
             stateRefresh = false;
             timeCount = 0;
+            // 状态刷新后，立即执行
+            curState->HandleAction(shared_from_this());
             return;
         }
         curState->HandleTimeOut(timeCount);
+        // HandleTimeOut中可能刷新状态
+        if (stateRefresh) {
+            stateRefresh = false;
+            timeCount = 0;
+            // 状态刷新后，立即执行
+            curState->HandleAction(shared_from_this());
+        }
         timeCount += timeInterval;
     }
 

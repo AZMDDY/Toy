@@ -50,7 +50,7 @@ public:
         }
 
         // 已达到超时重试次数
-        if (timeOutCnt == timeOutRetryCnt) {
+        if (timeOutCnt >= timeOutRetryCnt) {
             isException = true;
             return HandleException();
         }

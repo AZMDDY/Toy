@@ -4,6 +4,7 @@
 message("Compile Public State DT")
 
 include_directories(${TOY_PATH}/Utility/Log)
+include_directories(${TOY_PATH}/Utility/Thread)
 include_directories(${TOY_PATH}/Public/State)
 
 set(EXEC_NAME dt-public-state)

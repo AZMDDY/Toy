@@ -4,14 +4,19 @@
 #include "gtest/gtest.h"
 #include <thread>
 #include "Type.h"
+#include "Thread.h"
+#include "FuncTimeCalculator.h"
 #include "Context.h"
 #include "EndState.h"
+
+using namespace Utility;
+
 class StateTestFixtrue : public testing::Test {
 public:
     StateTestFixtrue() = default;
     ~StateTestFixtrue() override = default;
 
-    static void SetUpTestSuite() {}
+    static void SetUpTestSuite() { SetLogLevel(LogLevel::DEBUG); }
     static void TearDownTestSuite() {}
 
 protected:
@@ -37,13 +42,13 @@ protected:
     }
 
 public:
-    BState() : IState(2, 1000, 1) {}
+    BState() : IState(2, 100, 1) {}
     ~BState() override = default;
 };
 
 class AState : public IState {
 public:
-    AState() : IState(1, 10, 3) {}
+    AState() : IState(1, 100, 3) {}
     ~AState() override = default;
 
 protected:
@@ -54,20 +59,25 @@ protected:
     }
     uint32_t HandleTimeOut() override
     {
+        LOG_ERROR() << "A Retry...";
         if (timeOutCnt == timeOutRetryCnt) {
             ctx->SetState(std::make_shared<BState>());
-            return EOK;
         }
-        LOG_ERROR() << "A Retry...";
         return EOK;
     }
 };
 
 TEST_F(StateTestFixtrue, StateCreate)
 {
+    SetLogLevel(LogLevel::ERROR);
+
     auto ctx = std::make_shared<Context>(std::make_shared<AState>());
-    while (!ctx->IsEnd() && !ctx->IsException()) {
-        ctx->Handle(10);
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    FuncTimeCalculator a(__FUNCTION__);
+    while (true) {
+        ctx->Handle(1);
+        if (ctx->IsEnd() || ctx->IsException()) {
+            return;
+        }
+        SleepFor(10.0);
     }
 }

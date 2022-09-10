@@ -17,7 +17,7 @@ namespace Details {
     LogStream::~LogStream()
     {
         if (logLevel >= g_logLevel) {
-            std::cerr << data << std::endl;
+            std::cerr << data << std::endl << std::flush;
         }
     }
 
