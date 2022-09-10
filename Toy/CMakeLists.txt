@@ -5,3 +5,4 @@ include_directories(${TOY_PATH}/Basic)
 include_directories(${TOY_PATH}/Utility/Log)
 
 add_subdirectory(Utility)
+add_subdirectory(Public)

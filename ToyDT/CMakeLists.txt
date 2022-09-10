@@ -12,6 +12,7 @@ link_directories(${THIRDPARTY_LIB_PATH})
 message("Compile ToyDT")
 
 add_subdirectory(Utility)
+add_subdirectory(Public)
 
 set(SRCS_LIST DemoTest.cpp PerceptronTest.cpp)
 

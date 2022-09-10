@@ -1,5 +1,5 @@
 // Copyright (c) 2022 zhengzhibing All rights reserved.
-// Description:
+// Description: 感知器
 
 #ifndef TOY_PERCEPTRON_H
 #define TOY_PERCEPTRON_H
