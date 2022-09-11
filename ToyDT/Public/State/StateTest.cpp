@@ -2,7 +2,6 @@
 // Description:
 
 #include "gtest/gtest.h"
-#include <thread>
 #include "Type.h"
 #include "Thread.h"
 #include "FuncTimeCalculator.h"
@@ -72,9 +71,9 @@ TEST_F(StateTestFixtrue, StateCreate)
     SetLogLevel(LogLevel::ERROR);
 
     auto ctx = std::make_shared<Context>(std::make_shared<AState>());
-    FuncTimeCalculator a(__FUNCTION__);
+    FUNC_TIME_CAL();
     while (true) {
-        ctx->Handle(1);
+        ctx->Handle(10);
         if (ctx->IsEnd() || ctx->IsException()) {
             return;
         }

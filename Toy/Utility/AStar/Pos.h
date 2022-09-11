@@ -37,6 +37,18 @@ namespace AStar {
         uint32_t y;
     };
     Pos operator+(const Pos& aPos, const Pos& bPos);
+
+    enum DistanceType {
+        D8_EQ  // 8个方向移动一格的距离相同
+    };
+
+    template<DistanceType type = D8_EQ>
+    uint32_t Distance(const Pos& sPos, const Pos& ePos)
+    {
+        uint32_t dx = std::abs(static_cast<int32_t>(sPos.x - ePos.x));
+        uint32_t dy = std::abs(static_cast<int32_t>(sPos.y - ePos.y));
+        return dx > dy ? dx : dy;
+    }
 }  // namespace AStar
 }  // namespace Utility
 #endif  // TOY_POS_H

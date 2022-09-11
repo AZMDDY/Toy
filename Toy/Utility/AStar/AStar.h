@@ -1,5 +1,5 @@
 // Copyright (c) 2022 zhengzhibing All rights reserved.
-// Description:
+// Description: A*算法
 
 #ifndef TOY_ASTAR_H
 #define TOY_ASTAR_H
@@ -11,23 +11,26 @@ namespace Utility {
 namespace AStar {
     class AStar {
     public:
-        static AStar& Intance();
+        static AStar& Instance();
         AStar(const AStar& aStar) = delete;
         AStar operator=(const AStar& aStar) = delete;
 
         uint32_t FindPath(const Map& map, const Pos& startPos, const Pos& endPos, std::vector<Pos>& path);
 
     protected:
-        virtual bool PosIsValid(const Map& map, int32_t step, const Pos& pos) const;
+        virtual bool PosIsValid(const Map& map, uint32_t step, const Pos& pos) const;
 
         // 起点到当前点的代价
-        virtual int32_t StartMoveCost(const Pos& startPos, const Pos& curPos) const;
+        virtual uint32_t Start2CurCost(const Pos& startPos, const Pos& curPos) const
+        {
+            return MoveCost(startPos, curPos);
+        }
 
         // 当前点到终点的预估代价
-        virtual int32_t EndMoveCost(const Pos& curPos, const Pos& endPos) const;
+        virtual uint32_t Cur2EndCost(const Pos& curPos, const Pos& endPos) const { return MoveCost(curPos, endPos); }
 
         // 通用的移动代价
-        virtual int32_t MoveCost(const Pos& pos1, const Pos& pos2) const;
+        virtual uint32_t MoveCost(const Pos& pos1, const Pos& pos2) const { return Distance<D8_EQ>(pos1, pos2); }
 
     private:
         AStar() = default;
@@ -38,10 +41,10 @@ namespace AStar {
         using PosCostPtr = std::shared_ptr<PosCost>;
         class PosCost {
         public:
-            PosCost() : pos(0, 0), cost(0), parent(nullptr) {}
+            PosCost() : step(0), cost(0), parent(nullptr), pos(0, 0) {}
 
-            PosCost(const Pos& pos, int32_t cost, PosCostPtr parent = nullptr)
-                : pos(pos), cost(cost), parent(std::move(parent))
+            PosCost(const Pos& pos, uint32_t cost, uint32_t step = 0, PosCostPtr parent = nullptr)
+                : step(step), cost(cost), parent(std::move(parent)), pos(pos)
             {
             }
             PosCost(const PosCost& cost) = default;
@@ -49,23 +52,27 @@ namespace AStar {
 
             bool operator<(const PosCost& posCost) const { return this->cost < posCost.cost; }
 
+            const Pos& operator()() const { return pos; }
+
         public:
-            Pos pos;
-            int32_t cost;
+            uint32_t step;  // 当前步数
+            uint32_t cost;  // 代价
             PosCostPtr parent;
+
+        private:
+            Pos pos;
         };
 
     private:
-        void MigratePoint(const Map& map, const PosCost& posCost, int32_t step, const Pos& startPos, const Pos& endPos);
+        void MigratePoint(const Map& map, const PosCost& posCost, const Pos& startPos, const Pos& endPos);
 
         void OpenZoneEmplace(const PosCost& posCost);
-        PosCost OpenZoneTop() const;
-        void OpenZonePop();
+        PosCost OpenZonePop();
 
     private:
-        std::map<PosCost, int32_t> openZone;  // 按照代价从小到大排序
-        std::set<Pos> openZoneCopy;           // 用于快速查找
-        std::map<Pos, int32_t> closeZone;
+        std::set<PosCost> openZone;         // 待考察的点，按照代价从小到大排序
+        std::set<Pos> openZoneCopy;         // 用于快速查找点
+        std::map<Pos, uint32_t> closeZone;  // 已考察的点
     };
 }  // namespace AStar
 }  // namespace Utility

@@ -6,6 +6,9 @@
 #include <chrono>
 #include <string>
 #include "Log.h"
+
+#define FUNC_TIME_CAL() FuncTimeCalculator ftc(__FUNCTION__)
+
 namespace Utility {
 struct FuncTimeCalculator {
 public:
