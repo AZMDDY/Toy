@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 #include "Log.h"
 #include "AStar.h"
+#include "FuncTimeCalculator.h"
 using namespace Utility::AStar;
 
 class AStarTestFixtrue : public testing::Test {
@@ -57,6 +58,7 @@ TEST_F(AStarTestFixtrue, Unit)
 
 TEST_F(AStarTestFixtrue, Find)
 {
+    FUNC_TIME_CAL();
     auto path = aStar.FindPath(myMap, {0, 0}, {11, 11});
     for (auto& pos : path) {
         LOG_ERROR() << pos.ToStr();
@@ -68,9 +70,9 @@ class AStar1 : public AStar {
 protected:
     bool PosIsValid(const Map& map, uint32_t step, const Pos& pos) const override
     {
-        //        if (step > 10) {
-        //            return false;
-        //        }
+        if (step > 7) {
+            return false;
+        }
         return AStar::PosIsValid(map, step, pos);
     }
 };
@@ -79,7 +81,7 @@ TEST_F(AStarTestFixtrue, LimitStep)
 {
     AStar1 aStar1;
     EXPECT_EQ(myMap[Pos(4, 4)].IsSpace(), true);
-
+    FUNC_TIME_CAL();
     auto path = aStar1.FindPath(myMap, {0, 0}, {4, 4});
     for (auto& pos : path) {
         LOG_ERROR() << pos.ToStr();

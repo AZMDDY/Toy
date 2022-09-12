@@ -5,7 +5,7 @@ message("Compile AStar DT")
 
 include_directories(${TOY_PATH}/Utility/Log)
 include_directories(${TOY_PATH}/Utility/AStar)
-
+include_directories(${TOY_PATH}/Utility/Thread)
 set(SRCS_LIST AStarTest.cpp)
 
 add_executable(dt-utility-astar ${SRCS_LIST})

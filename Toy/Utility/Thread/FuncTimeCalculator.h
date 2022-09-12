@@ -7,7 +7,7 @@
 #include <string>
 #include "Log.h"
 
-#define FUNC_TIME_CAL() FuncTimeCalculator ftc(__FUNCTION__)
+#define FUNC_TIME_CAL() Utility::FuncTimeCalculator ftc(__FUNCTION__)
 
 namespace Utility {
 struct FuncTimeCalculator {
