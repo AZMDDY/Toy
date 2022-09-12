@@ -5,7 +5,7 @@
 #define TOY_LOG_H
 #include <string>
 #include <type_traits>
-
+#include "Type.h"
 #define FILENAME_ (std::strrchr(__FILE__, '/') ? (std::strrchr(__FILE__, '/') + 1) : __FILE__)
 
 #define LOG_DEBUG()                              \

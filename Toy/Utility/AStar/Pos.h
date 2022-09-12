@@ -24,11 +24,13 @@ namespace AStar {
 
         bool operator<(const Pos& pos) const
         {
-            if (x < pos.x) {
-                return true;
+            if (x == pos.x) {
+                return y < pos.y;
             }
-            return y < pos.y;
+            return x < pos.x;
         }
+
+        inline uint32_t ToUnit(uint32_t width) const { return y * width + x; }
 
         std::string ToStr() const;
 

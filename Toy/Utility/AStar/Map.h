@@ -12,15 +12,16 @@ namespace AStar {
         Map(uint32_t w, uint32_t h);
         ~Map() = default;
 
+        uint32_t Init(const std::vector<uint32_t>& data);
+
         bool InRange(const Pos& pos) const { return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height; }
 
         // 不做范围检查
-        Zone& operator[](const Pos& pos) { return map[GetVal(pos)]; }
+        Zone& operator[](const Pos& pos) { return map[Pos2Uint(pos)]; }
 
-        const Zone& operator[](const Pos& pos) const { return map[GetVal(pos)]; }
+        const Zone& operator[](const Pos& pos) const { return map[Pos2Uint(pos)]; }
 
-    private:
-        uint32_t GetVal(const Pos& pos) const { return pos.y * width + pos.x; }
+        uint32_t Pos2Uint(const Pos& pos) const { return pos.ToUnit(width); }
 
     private:
         uint32_t width;

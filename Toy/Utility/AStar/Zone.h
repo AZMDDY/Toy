@@ -8,14 +8,14 @@
 namespace Utility {
 namespace AStar {
     enum class Unit {
-        SPACE = 0,  // 空地
+        // 0: 空地
+        WALL = 1,  // 墙
         BUTT
     };
 
     class Zone {
     public:
-        // 默认区域中是空地
-        explicit Zone(const Pos& pos = {0, 0}) : pos(pos) { units[Unit::SPACE] = 1; }
+        explicit Zone(const Pos& pos = {0, 0}) : pos(pos) {}
         ~Zone() = default;
 
         bool operator==(const Zone& zone) const { return pos == zone.pos && units == zone.units; }
@@ -30,7 +30,7 @@ namespace AStar {
 
     private:
         Pos pos;
-        std::unordered_map<Unit, uint32_t> units;
+        std::unordered_map<Unit, uint32_t> units;  // size == 0 就表示空地
     };
 }  // namespace AStar
 }  // namespace Utility

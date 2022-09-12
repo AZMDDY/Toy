@@ -4,18 +4,18 @@
 #ifndef TOY_ASTAR_H
 #define TOY_ASTAR_H
 #include <set>
-#include <map>
 #include "Pos.h"
 #include "Map.h"
 namespace Utility {
 namespace AStar {
     class AStar {
     public:
-        static AStar& Instance();
+        AStar() = default;
+        virtual ~AStar() = default;
         AStar(const AStar& aStar) = delete;
         AStar operator=(const AStar& aStar) = delete;
 
-        uint32_t FindPath(const Map& map, const Pos& startPos, const Pos& endPos, std::vector<Pos>& path);
+        std::vector<Pos> FindPath(const Map& map, const Pos& startPos, const Pos& endPos);
 
     protected:
         virtual bool PosIsValid(const Map& map, uint32_t step, const Pos& pos) const;
@@ -31,10 +31,6 @@ namespace AStar {
 
         // 通用的移动代价
         virtual uint32_t MoveCost(const Pos& pos1, const Pos& pos2) const { return Distance<D8_EQ>(pos1, pos2); }
-
-    private:
-        AStar() = default;
-        ~AStar() = default;
 
     private:
         class PosCost;
@@ -68,11 +64,12 @@ namespace AStar {
 
         void OpenZoneEmplace(const PosCost& posCost);
         PosCost OpenZonePop();
+        void Clear();
 
     private:
-        std::set<PosCost> openZone;         // 待考察的点，按照代价从小到大排序
-        std::set<Pos> openZoneCopy;         // 用于快速查找点
-        std::map<Pos, uint32_t> closeZone;  // 已考察的点
+        std::multiset<PosCost> openZone;  // 待考察的点，按照代价从小到大排序
+        std::multiset<Pos> openZoneCopy;  // 用于快速查找点
+        std::set<Pos> closeZone;          // 已考察的点
     };
 }  // namespace AStar
 }  // namespace Utility
