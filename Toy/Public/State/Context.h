@@ -10,7 +10,7 @@
 
 class Context : public std::enable_shared_from_this<Context> {
 public:
-    Context(const IStatePtr& initState) : curState(initState), timeCount(0), stateRefresh(false) {}
+    Context(IStatePtr initState) : curState(std::move(initState)), timeCount(0), stateRefresh(false) {}
     ~Context() = default;
 
     void SetState(const IStatePtr& state)

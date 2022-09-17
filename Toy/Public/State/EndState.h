@@ -10,7 +10,7 @@ public:
     ~EndState() override = default;
 
 protected:
-    uint32_t HandleAction() override
+    uint32_t HandleAction(IMsgPtr msg) override
     {
         isFinished = true;
         return EOK;

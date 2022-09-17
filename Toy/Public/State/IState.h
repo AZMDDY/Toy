@@ -5,7 +5,9 @@
 #define TOY_ISTATE_H
 #include <cstdint>
 #include <memory>
+#include <utility>
 #include "Type.h"
+#include "IMsg.h"
 class IState;
 class Context;
 
@@ -17,9 +19,9 @@ const uint32_t STATE_END = 0;  // 结束
 
 class IState {
 public:
-    explicit IState(uint32_t type, uint32_t timeOutLen = 0, uint32_t retryCnt = 0)
+    explicit IState(uint32_t type, uint32_t timeOutLen = 0, uint32_t retryCnt = 0, IMsgPtr iMsg = nullptr)
         : isFinished(false), ctx(nullptr), stateType(type), timeOut(timeOutLen), timeOutRetryCnt(retryCnt),
-          timeOutCnt(0), isException(false), isHandled(false)
+          timeOutCnt(0), isException(false), isHandled(false), msg(std::move(iMsg))
     {
     }
 
@@ -39,7 +41,7 @@ public:
 
         // 保证只Handle一次
         isHandled = true;
-        return HandleAction();
+        return HandleAction(msg);
     }
 
     uint32_t HandleTimeOut(uint32_t timeCnt)
@@ -70,7 +72,7 @@ public:
     uint32_t Type() const { return stateType; }
 
 protected:
-    virtual uint32_t HandleAction() = 0;
+    virtual uint32_t HandleAction(IMsgPtr msg) = 0;
     virtual uint32_t HandleTimeOut() = 0;
     // 超时重试次数耗尽时，触发异常处理
     virtual uint32_t HandleException() { return EOK; }
@@ -85,5 +87,6 @@ protected:
 private:
     bool isException;  // 是否异常
     bool isHandled;    // 是否已经处理过(执行过HandleAction)
+    IMsgPtr msg;
 };
 #endif  // TOY_ISTATE_H
